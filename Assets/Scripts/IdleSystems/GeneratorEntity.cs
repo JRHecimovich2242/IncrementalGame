@@ -9,7 +9,7 @@ public enum GeneratorDirtyFlags
     Progress = 1 << 1,
     CurrencyGenerated = 1 << 2,
     RateDirty = 1 << 3,
-    AmountGeneratedDirty = 1 << 3,
+    AmountGeneratedDirty = 1 << 4,
     All = ~0,
 }
 
@@ -19,7 +19,8 @@ public class GeneratorEntity : IGenerator
     public bool IsActive { get { return NumOwned > 0; } }
     public string Id { get { return m_data.GeneratorId; } }
     public uint NumOwned {  get; private set; }
-    public double CurrentAmount { get; private set; }
+    public double CurrentAmount { get { return _currentAmount; } }
+    private double _currentAmount = 0;
 
     public double TimeToGenerate => GetTimeToGenerate();
     private double _timeToGenerate = 0;
@@ -34,6 +35,7 @@ public class GeneratorEntity : IGenerator
     {
         m_data = data;      
         NumOwned = 0;
+        _currentAmount = data.BaseGeneratedCurrency;
         MarkDirty(GeneratorDirtyFlags.All);
     }
 
@@ -67,9 +69,9 @@ public class GeneratorEntity : IGenerator
         //}
     }
 
-    public void Purchase(uint numToPurchase)
+    public void Purchase(int numToPurchase)
     {
-        double costOfPurchase = m_data.BaseCost + (m_data.CostGrowth * NumOwned);
+        double costOfPurchase = GetCostOfNextPurchase();
         // Start at 1 bc the above calculates the cost of buying the 0th new generator
         for (int i = 1; i < numToPurchase; i++)
         {
@@ -80,11 +82,16 @@ public class GeneratorEntity : IGenerator
         {
             MarkDirty(GeneratorDirtyFlags.OwnedCount);
 
-            NumOwned += numToPurchase;
+            NumOwned += (uint)numToPurchase;
         }
     }
 
-    public void Sell(uint numToSell)
+    public double GetCostOfNextPurchase()
+    {
+        return m_data.BaseCost + (m_data.CostGrowth * NumOwned);
+    }
+
+    public void Sell(int numToSell)
     {
         throw new System.NotImplementedException();
     }
@@ -104,12 +111,12 @@ public class GeneratorEntity : IGenerator
         else
         {
             CurrentGenerationProgress += deltaTime / TimeToGenerate;
+            MarkDirty(GeneratorDirtyFlags.Progress);
         }
        
         if (CurrentGenerationProgress >= 1f)
         {
-            // Generate currency
-            CurrencyManager.Instance.ModifyCurrency(m_data.GeneratedCurrencyType, CurrentAmount);
+            GenerateCurrency();
 
             // Allow overflow into next tick
             double overflow = CurrentGenerationProgress - 1;
@@ -124,11 +131,25 @@ public class GeneratorEntity : IGenerator
         }
     }
 
+    private void GenerateCurrency()
+    {
+        if(_dirtyFlags.HasFlag(GeneratorDirtyFlags.OwnedCount))
+        {
+            // Recalculate amount to generate
+            _currentAmount = Data.BaseGeneratedCurrency * NumOwned;
+
+            ClearDirtyFlag(GeneratorDirtyFlags.OwnedCount);
+        }
+
+        CurrencyManager.Instance.ModifyCurrency(m_data.GeneratedCurrencyType, CurrentAmount);
+    }
+
     private double GetTimeToGenerate()
     {
         if (_dirtyFlags.HasFlag(GeneratorDirtyFlags.RateDirty))
         {
-            double baseRate = m_data.BaseRate;
+            // TODO: Apply upgrades
+            double newRate = m_data.BaseRate;
             foreach (var upgrade in _appliedUpgrades)
             {
                 // If Upgrade modifies rate
@@ -136,6 +157,7 @@ public class GeneratorEntity : IGenerator
                 // Apply upgrades to rate
             }
 
+            _timeToGenerate = newRate;
             ClearDirtyFlag(GeneratorDirtyFlags.RateDirty);
         }
 

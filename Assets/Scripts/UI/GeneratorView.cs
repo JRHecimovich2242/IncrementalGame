@@ -9,8 +9,10 @@ public class GeneratorView : MonoBehaviour
     [SerializeField] private Image generatorIconImage = null;
     [SerializeField] private Image progressFill = null;
     [SerializeField] private TMP_Text nameText = null;
+    [SerializeField] private TMP_Text costText = null;
     [SerializeField] private TMP_Text numOwnedText = null;
-    //private bool isViewActive = false;
+    [SerializeField] private TMP_Text generationRateText = null;
+    //private bool isViewActive = false; // TODO: Add enabled/disabled visuals and only show when player has purchased the prior X generators at least once
     public void DisplayGenerationCompleteVisual()
     {
         if(generationCompleteVisual != null && !generationCompleteVisual.activeInHierarchy)
@@ -77,5 +79,36 @@ public class GeneratorView : MonoBehaviour
     public void TransitionToInfiniteGeneration()
     {
         throw new NotImplementedException();
+    }
+
+    public void SetCostText(double cost)
+    {
+        if(costText != null)
+        {
+            costText.text = cost.ToString();
+        }
+    }
+
+    public void UpdateRateText(double amountGenerated, double rate)
+    {
+        if(generationRateText != null)
+        {
+            string timeInterval;
+            if(rate < 60)
+            {
+                // Seconds
+                timeInterval = " s";
+            }
+            else
+            {
+                // Minutes
+                timeInterval = " m";
+                rate /= 60;
+            }
+            // TODO: Handle more robust time display (hours)
+
+            string rateString = string.Format("{0} {1} / {2}{3}", new object[] { amountGenerated, " scrap ", rate, timeInterval });
+            generationRateText.text = rateString;
+        }
     }
 }

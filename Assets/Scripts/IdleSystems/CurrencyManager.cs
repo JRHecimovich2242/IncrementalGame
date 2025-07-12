@@ -6,6 +6,19 @@ public class CurrencyManager : Singleton<CurrencyManager>
 {
     private readonly Dictionary<CurrencyType, ICurrency> currencies = new();
     public event Action<CurrencyType, double> OnCurrencyChanged;
+
+    public void AddNewCurrency(ICurrency newCurrency)
+    {
+        if(currencies.ContainsKey(newCurrency.Type))
+        {
+            Debug.LogErrorFormat("Tried to add a duplicate currency with name \"{0}\" to currency dict.", new object[] { newCurrency.Type.ToString() });
+            return;
+        }
+
+        currencies.Add(newCurrency.Type, newCurrency);
+        OnCurrencyChanged?.Invoke(newCurrency.Type, newCurrency.Amount);
+    }
+
     public void ModifyCurrency(CurrencyType currencyType, double value)
     {
         if (!currencies.ContainsKey(currencyType))

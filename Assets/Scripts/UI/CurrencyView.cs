@@ -17,6 +17,7 @@ public class CurrencyView : MonoBehaviour
     public void Initialize()
     {
         CurrencyManager.Instance.OnCurrencyChanged += OnCurrencyChanged;
+        Refresh(0);
     }
 
     private void OnCurrencyChanged(CurrencyType changedType, double value)

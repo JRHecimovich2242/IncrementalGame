@@ -8,6 +8,7 @@ public class GeneratorData : ScriptableObject
     public double BaseCost;
     public double CostGrowth;
     public CurrencyType GeneratedCurrencyType;
+    public double BaseGeneratedCurrency;
     public double BaseRate;
     public Sprite Icon;
 }

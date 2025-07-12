@@ -36,6 +36,8 @@ public class GeneratorController : MonoBehaviour
         if (pendingFlags.HasFlag(GeneratorDirtyFlags.OwnedCount))
         {
             _view.SetNumOwned(_model.NumOwned);
+            _view.SetCostText(_model.GetCostOfNextPurchase());
+            _view.UpdateRateText(_model.CurrentAmount, _model.TimeToGenerate);
         }
 
         if (pendingFlags.HasFlag(GeneratorDirtyFlags.Progress))
@@ -54,5 +56,10 @@ public class GeneratorController : MonoBehaviour
     private void OnModelDirty(GeneratorDirtyFlags flags)
     {
         pendingFlags |= flags;
+    }
+
+    public void OnClickPurchase(int toPurchase)
+    {
+        _model.Purchase(toPurchase);
     }
 }

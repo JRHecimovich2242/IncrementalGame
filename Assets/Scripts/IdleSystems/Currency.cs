@@ -6,7 +6,7 @@ public enum CurrencyType
 
 public interface ICurrency
 {
-    CurrencyType Name { get; }
+    CurrencyType Type { get; }
     double Amount { get; }
     void Add(double amount);
     bool Spend(double amount);
@@ -14,13 +14,13 @@ public interface ICurrency
 
 public class SimpleCurrency : ICurrency
 {
-    public CurrencyType Name { get; private set; }
+    public CurrencyType Type { get; private set; }
 
     public double Amount { get; private set; }
 
-    public SimpleCurrency(CurrencyType name, double startingAmount)
+    public SimpleCurrency(CurrencyType type, double startingAmount)
     {
-        Name = name;
+        Type = type;
         Amount = startingAmount;
     }
 

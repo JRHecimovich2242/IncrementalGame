@@ -7,7 +7,7 @@ public interface IGenerator
     double TimeToGenerate { get; }
     double CurrentGenerationProgress { get; }
     void Tick(double deltaTime);
-    void Purchase(uint numToPurchase);
-    void Sell(uint numToSell);
+    void Purchase(int numToPurchase);
+    void Sell(int numToSell);
     void ApplyUpgrade(IUpgrade upgrade);
 }
