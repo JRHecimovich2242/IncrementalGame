@@ -89,26 +89,11 @@ public class GeneratorView : MonoBehaviour
         }
     }
 
-    public void UpdateRateText(double amountGenerated, double rate)
+    public void UpdateRateText(double amountGenerated)
     {
         if(generationRateText != null)
         {
-            string timeInterval;
-            if(rate < 60)
-            {
-                // Seconds
-                timeInterval = " s";
-            }
-            else
-            {
-                // Minutes
-                timeInterval = " m";
-                rate /= 60;
-            }
-            // TODO: Handle more robust time display (hours)
-
-            string rateString = string.Format("{0} {1} / {2}{3}", new object[] { amountGenerated, " scrap ", rate, timeInterval });
-            generationRateText.text = rateString;
+            generationRateText.text = amountGenerated.ToString();
         }
     }
 }

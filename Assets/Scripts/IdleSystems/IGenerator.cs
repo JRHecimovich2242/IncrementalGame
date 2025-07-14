@@ -9,5 +9,5 @@ public interface IGenerator
     void Tick(double deltaTime);
     void Purchase(int numToPurchase);
     void Sell(int numToSell);
-    void ApplyUpgrade(IUpgrade upgrade);
+    void ApplyUpgrade(UpgradeData upgrade);
 }

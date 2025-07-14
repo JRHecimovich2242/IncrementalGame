@@ -11,4 +11,6 @@ public class GeneratorData : ScriptableObject
     public double BaseGeneratedCurrency;
     public double BaseRate;
     public Sprite Icon;
+
+    public bool IsOwned { get { return GameState.Instance.OwnedGeneratorDict.ContainsKey(this); } }
 }

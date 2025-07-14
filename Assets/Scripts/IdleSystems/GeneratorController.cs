@@ -33,11 +33,15 @@ public class GeneratorController : MonoBehaviour
             return;
         }
 
+        if (pendingFlags.HasFlag(GeneratorDirtyFlags.AmountGenerated))
+        {
+            _view.UpdateRateText(_model.CurrentAmount);
+        }
+
         if (pendingFlags.HasFlag(GeneratorDirtyFlags.OwnedCount))
         {
             _view.SetNumOwned(_model.NumOwned);
             _view.SetCostText(_model.GetCostOfNextPurchase());
-            _view.UpdateRateText(_model.CurrentAmount, _model.TimeToGenerate);
         }
 
         if (pendingFlags.HasFlag(GeneratorDirtyFlags.Progress))
@@ -61,5 +65,10 @@ public class GeneratorController : MonoBehaviour
     public void OnClickPurchase(int toPurchase)
     {
         _model.Purchase(toPurchase);
+    }
+
+    public void OnClickActivateGenerator()
+    {
+        _model.Run();
     }
 }

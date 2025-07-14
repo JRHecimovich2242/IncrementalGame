@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    [Header("References")]
-    [SerializeField] private UIManager uiManager;
-
     private List<GeneratorEntity> generatorEntities = new();
     public bool GameActive { get; private set; } = false;
 
@@ -37,7 +34,6 @@ public class GameManager : Singleton<GameManager>
     private void InitializeGenerators()
     {
         List<GeneratorData> generatorDataList = Resources.LoadAll<GeneratorData>("Generators/").ToList();
-
         generatorDataList.Sort((a,b) => a.BaseCost.CompareTo(b.BaseCost));
 
         foreach (var data in generatorDataList)
@@ -45,12 +41,21 @@ public class GameManager : Singleton<GameManager>
             GeneratorEntity newEntity = new GeneratorEntity(data);
             generatorEntities.Add(newEntity);
 
-            uiManager.SpawnGeneratorUI(newEntity);
+            UIManager.Instance.SpawnGeneratorUI(newEntity);
+        }
+
+        List<UpgradeData> upgradeDataList = Resources.LoadAll<UpgradeData>("Upgrades/").ToList();
+        upgradeDataList.Sort((a, b) => a.Cost.CompareTo(b.Cost));
+
+        foreach(var upgradeData in upgradeDataList)
+        {
+            UIManager.Instance.SpawnUpgradeUI(upgradeData);
         }
     }
     
     private void InitializeCurrencies()
     {
+        // TODO: Move to GameState load behavior
         // TODO: Init with saved data
 
         // Basic Currency (Scrap)
@@ -72,5 +77,10 @@ public class GameManager : Singleton<GameManager>
         {
             entity.Tick(deltaTime);
         }
+    }
+
+    public GeneratorEntity GetGeneratorEntityMatchingData(GeneratorData data)
+    {
+        return generatorEntities.Find(x => x.Data == data);
     }
 }
