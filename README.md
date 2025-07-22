@@ -1,5 +1,5 @@
 # IncrementalGame
-A simple idle/incremental game for learning
+A simple idle/incremental game made in Unity
 
 # Credits
 Art by Rafa Morales
