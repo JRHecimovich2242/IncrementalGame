@@ -28,7 +28,7 @@ public struct UpgradeDisplayCondition
             case DisplayConditionType.GeneratorOwnedCount:
                 {
                     // Query current game state
-                    return requiredOwnedCount <= 0 || (GameState.Instance.OwnedGeneratorDict.ContainsKey(RequiredGenerator) && GameState.Instance.OwnedGeneratorDict[RequiredGenerator] > requiredOwnedCount);
+                    return requiredOwnedCount <= 0 || (GameState.Instance.OwnedGeneratorDict.ContainsKey(RequiredGenerator) && GameState.Instance.OwnedGeneratorDict[RequiredGenerator] >= requiredOwnedCount);
                 }
             case DisplayConditionType.None:
             default:

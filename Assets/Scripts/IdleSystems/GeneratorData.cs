@@ -5,6 +5,8 @@ public class GeneratorData : ScriptableObject
 {
     public string GeneratorId;
     public CurrencyType CostType;
+    public double CurrencyRequiredToShowView;
+    public double CurrencyRequiredToUnobscureView;
     public double BaseCost;
     public double CostGrowth;
     public CurrencyType GeneratedCurrencyType;

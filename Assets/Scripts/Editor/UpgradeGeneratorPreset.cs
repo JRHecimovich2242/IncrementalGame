@@ -1,30 +1,37 @@
 
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "NewUpgradePreset", menuName = "Idle/Upgrade Generator Preset")]
 public class UpgradeGeneratorPreset : ScriptableObject
 {
-    public int rateUpgradeCount = 3;
-    public int outputUpgradeCount = 3;
-    public bool includeAutomationUpgrade = true;
+    public int RateUpgradeCount = 3;
+    public int OutputUpgradeCount = 3;
+    public bool IncludeAutomationUpgrade = true;
 
-    public double baseCost = 100;
-    public double costMultiplier = 3;
+    public float RateMultiplier = 1.5f;
+    public float OutputMultiplier = 2.0f;
 
-    public float rateMultiplier = 1.5f;
-    public float outputMultiplier = 2.0f;
+
+    public double OutputBaseCost = 100;
+    public double OutputCostMultiplier = 3;
+
+    public double RateBaseCost = 100;
+    public double RateCostMultiplier = 3;
+
+    public double AutomationCost = 100;
 
     public CurrencyType currencyType = CurrencyType.Basic;
 
-    public string rateName = "Speed Boost";
-    public string rateDescription = "Increases generation speed.";
-    public Sprite rateIcon;
+    public string RateName = "Speed Boost";
+    public string RateDescription = "Increases generation speed.";
+    public Sprite RateIcon;
 
-    public string outputName = "Output Boost";
-    public string outputDescription = "Increases output amount.";
-    public Sprite outputIcon;
+    public string OutputName = "Output Boost";
+    public string OutputDescription = "Increases output amount.";
+    public Sprite OutputIcon;
 
-    public string automationName = "Automation";
-    public string automationDescription = "Automates this generator.";
-    public Sprite automationIcon;
+    public string AutomationName = "Automation";
+    public string AutomationDescription = "Automates this generator.";
+    public Sprite AutomationIcon;
 }

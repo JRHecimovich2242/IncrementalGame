@@ -60,4 +60,36 @@ public class CurrencyManager : Singleton<CurrencyManager>
     { 
         return currencies.TryGetValue(currencyType, out ICurrency currency) ? currency.Amount : 0; 
     }
+
+    public Dictionary<CurrencyType, double> GetAll()
+    {
+        var copy = new Dictionary<CurrencyType, double>(currencies.Count);
+
+        foreach (var kvp in currencies)
+        {
+            copy[kvp.Key] = kvp.Value.Amount;
+        }
+
+        return copy;
+    }
+
+    public void LoadAll(Dictionary<string, double> currencyDict)
+    {
+        foreach (var kvp in currencyDict)
+        {
+            if (Enum.TryParse(kvp.Key, out CurrencyType loadedType))
+            {
+                SimpleCurrency newCurrency = new(loadedType, kvp.Value);
+                AddNewCurrency(newCurrency);
+            }
+        }
+    }
+    public void LoadAll(Dictionary<CurrencyType, double> currencyDict)
+    {
+        foreach (var kvp in currencyDict)
+        {
+            SimpleCurrency newCurrency = new(kvp.Key, kvp.Value);
+            AddNewCurrency(newCurrency);
+        }
+    }
 }

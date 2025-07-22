@@ -6,6 +6,7 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     private List<GeneratorEntity> generatorEntities = new();
+    private static readonly string ClickerGeneratorName = "Clicker";
     public bool GameActive { get; private set; } = false;
 
     private void Start()
@@ -15,23 +16,19 @@ public class GameManager : Singleton<GameManager>
 
     private void BeginGame()
     {
-        // TODO: Load saved data
+        var loadedData = GameState.Instance.LoadGameState();
 
-        InitializeCurrencies();
+        TutorialObserver tutorialObserver = FindFirstObjectByType<TutorialObserver>();
+        if(tutorialObserver != null)
+        {
+            tutorialObserver.TryBeginTutorial(loadedData != null);
+        }
 
-        InitializeGenerators();
-
+        InitializeGenerators(loadedData);
         GameActive = true;
     }
 
-    protected override void OnApplicationQuit()
-    {
-        base.OnApplicationQuit();
-
-        // TODO: Save data
-    }
-
-    private void InitializeGenerators()
+    private void InitializeGenerators(SaveData loadFrom)
     {
         List<GeneratorData> generatorDataList = Resources.LoadAll<GeneratorData>("Generators/").ToList();
         generatorDataList.Sort((a,b) => a.BaseCost.CompareTo(b.BaseCost));
@@ -41,7 +38,28 @@ public class GameManager : Singleton<GameManager>
             GeneratorEntity newEntity = new GeneratorEntity(data);
             generatorEntities.Add(newEntity);
 
-            UIManager.Instance.SpawnGeneratorUI(newEntity);
+            if(data.GeneratorId == "Clicker")
+            {
+                UIManager.Instance.SetupClickerUI(newEntity);
+            }
+            else
+            {
+                UIManager.Instance.SpawnGeneratorUI(newEntity);
+            }
+
+            if(GameState.Instance.OwnedGeneratorDict.TryGetValue(data, out int savedValue))
+            {
+                if(savedValue > 0)
+                {
+                    newEntity.SetNumOwned((uint)savedValue);
+                }
+            }
+        }
+
+        if(GameState.Instance.OwnedGeneratorDict.Count == 0)
+        {
+            // If first startup, init with one clicker generator
+            generatorEntities.Find(x => x.Id == ClickerGeneratorName).SetNumOwned(1);
         }
 
         List<UpgradeData> upgradeDataList = Resources.LoadAll<UpgradeData>("Upgrades/").ToList();
@@ -49,18 +67,36 @@ public class GameManager : Singleton<GameManager>
 
         foreach(var upgradeData in upgradeDataList)
         {
-            UIManager.Instance.SpawnUpgradeUI(upgradeData);
-        }
-    }
-    
-    private void InitializeCurrencies()
-    {
-        // TODO: Move to GameState load behavior
-        // TODO: Init with saved data
+            if (GameState.Instance.PurchasedUpgrades.Contains(upgradeData))
+            {
+                GeneratorEntity targetEntity = GetGeneratorEntityMatchingData(upgradeData.TargetGenerator);
 
-        // Basic Currency (Scrap)
-        SimpleCurrency basicCurrency = new SimpleCurrency(CurrencyType.Basic, 0);
-        CurrencyManager.Instance.AddNewCurrency(basicCurrency);
+                if(targetEntity != null)
+                {
+                    targetEntity.ApplyUpgrade(upgradeData, shouldNotify: false);
+                }
+            }
+            else
+            {
+                UIManager.Instance.SpawnUpgradeUI(upgradeData);
+            }
+        }
+
+        // Apply loaded generator data / progress
+        if (loadFrom != null)
+        {
+            foreach(GeneratorEntity entity in generatorEntities)
+            {
+                if (entity.IsActive)
+                {
+                    GeneratorSaveEntry saveEntry = loadFrom.generators.Find(x => x.GeneratorId == entity.Id);
+                    if (saveEntry != null)
+                    {
+                        entity.LoadSavedInfo(saveEntry);
+                    }
+                }
+            }
+        }
     }
 
     private void Update()

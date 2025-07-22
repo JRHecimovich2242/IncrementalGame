@@ -12,21 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d49877b289d886e428597af034321100, type: 3}
   m_Name: Miner_UpgradeTool_Preset
   m_EditorClassIdentifier: 
-  rateUpgradeCount: 10
-  outputUpgradeCount: 10
-  includeAutomationUpgrade: 1
-  baseCost: 10
-  costMultiplier: 2
-  rateMultiplier: 0.9
-  outputMultiplier: 2
+  RateUpgradeCount: 10
+  OutputUpgradeCount: 10
+  IncludeAutomationUpgrade: 1
+  RateMultiplier: 1.25
+  OutputMultiplier: 2
+  OutputBaseCost: 10
+  OutputCostMultiplier: 1.5
+  RateBaseCost: 10
+  RateCostMultiplier: 1.5
+  AutomationCost: 100
   currencyType: 0
-  rateName: Laser Pickaxes
-  rateDescription: Upgraded pickaxes increase mining speed. Miners are 25% faster
-  rateIcon: {fileID: 21300000, guid: 7c3dd002bc54798459bb6b4df1572688, type: 3}
-  outputName: Miner's Rations
-  outputDescription: Increased rations allow for longer shifts and more output per
+  RateName: Laser Pickaxes
+  RateDescription: Upgraded pickaxes increase mining speed. Miners are 25% faster
+  RateIcon: {fileID: 21300000, guid: 7c3dd002bc54798459bb6b4df1572688, type: 3}
+  OutputName: Miner's Rations
+  OutputDescription: Increased rations allow for longer shifts and more output per
     miner! Miners are twice as efficient.
-  outputIcon: {fileID: 21300000, guid: 087ecf44afc8b5744be39f42dae3ccc4, type: 3}
-  automationName: Juicy Co. Energy Drink
-  automationDescription: Miners now generate scrap automatically
-  automationIcon: {fileID: 21300000, guid: d617f52ee79ec2d459380c584ee021f3, type: 3}
+  OutputIcon: {fileID: 21300000, guid: 087ecf44afc8b5744be39f42dae3ccc4, type: 3}
+  AutomationName: Juicy Co. Energy Drink
+  AutomationDescription: Miners now generate scrap automatically
+  AutomationIcon: {fileID: 21300000, guid: d617f52ee79ec2d459380c584ee021f3, type: 3}

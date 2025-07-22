@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class GeneratorView : MonoBehaviour
 {
+    private readonly Color CAN_AFFORD_COLOR = Color.green;
+    private readonly Color CANT_AFFORD_COLOR = Color.red;
+    [SerializeField] private GameObject obscureCover = null;
     [SerializeField] private GameObject generationCompleteVisual = null;
     [SerializeField] private Image generatorIconImage = null;
     [SerializeField] private Image progressFill = null;
@@ -12,7 +15,9 @@ public class GeneratorView : MonoBehaviour
     [SerializeField] private TMP_Text costText = null;
     [SerializeField] private TMP_Text numOwnedText = null;
     [SerializeField] private TMP_Text generationRateText = null;
-    //private bool isViewActive = false; // TODO: Add enabled/disabled visuals and only show when player has purchased the prior X generators at least once
+
+    public bool Obscured { get { return obscureCover != null && obscureCover.activeSelf; } }
+
     public void DisplayGenerationCompleteVisual()
     {
         if(generationCompleteVisual != null && !generationCompleteVisual.activeInHierarchy)
@@ -54,15 +59,14 @@ public class GeneratorView : MonoBehaviour
 
     public void SetNumOwned(uint numOwned)
     {
-        //if(numOwned > 0 && !isViewActive)
-        //{
-        //    SetEnabled(true);
-        //}
-        //else if(isViewActive && numOwned <= 0)
-        //{
-        //    SetEnabled(false);
-        //}
-
+        if (numOwned > 0 && !gameObject.activeSelf)
+        {
+            SetViewActive(true);
+        }
+        else if (gameObject.activeSelf && numOwned <= 0)
+        {
+            //SetEnabled(false);
+        }
 
         if (numOwnedText != null)
         {
@@ -70,10 +74,10 @@ public class GeneratorView : MonoBehaviour
         }
     }
 
-    public void SetEnabled(bool isEnabled)
+    public void SetViewActive(bool isEnabled)
     {
         // Logic for hiding panels for upcoming generators
-        throw new NotImplementedException();
+        gameObject.SetActive(isEnabled);
     }
 
     public void TransitionToInfiniteGeneration()
@@ -81,11 +85,13 @@ public class GeneratorView : MonoBehaviour
         throw new NotImplementedException();
     }
 
-    public void SetCostText(double cost)
+    public void SetCostText(double cost, bool canAfford = true)
     {
         if(costText != null)
         {
             costText.text = cost.ToString();
+
+            costText.color = canAfford ? CAN_AFFORD_COLOR : CANT_AFFORD_COLOR;
         }
     }
 
@@ -94,6 +100,14 @@ public class GeneratorView : MonoBehaviour
         if(generationRateText != null)
         {
             generationRateText.text = amountGenerated.ToString();
+        }
+    }
+
+    public void SetObscured(bool shouldObscure)
+    {
+        if(obscureCover != null)
+        {
+            obscureCover.SetActive(shouldObscure);
         }
     }
 }

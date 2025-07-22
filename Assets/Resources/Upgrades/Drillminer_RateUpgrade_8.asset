@@ -21,8 +21,8 @@ MonoBehaviour:
   DisplayCondition:
     conditionType: 1
     RequiredGenerator: {fileID: 11400000, guid: 7c9911d77f83b02459ac1de9bd2fe3e9, type: 2}
-    requiredOwnedCount: 140
-  UpgradeValue: 0.75
+    requiredOwnedCount: 400
+  UpgradeValue: 1.25
   UpgradeVisuals:
     UpgradeIcon: {fileID: 21300000, guid: 7db4d85133061c940935cf50fd5c4bf3, type: 3}
     SelectableSprite: {fileID: 0}

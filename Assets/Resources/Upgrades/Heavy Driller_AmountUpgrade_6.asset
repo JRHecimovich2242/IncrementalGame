@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d56a73fb728e6ac4d9cb3342ec57511f, type: 3}
   m_Name: Heavy Driller_AmountUpgrade_6
   m_EditorClassIdentifier: 
-  UpgradeName: Output Boost 7
+  UpgradeName: Superheated Prisms 7
   UpgradeDescription: Fiery prisms melt rock with ease and double heavy driller output
   CostType: 0
-  Cost: 2048000
+  Cost: 36450
   TargetGenerator: {fileID: 11400000, guid: 8f1034bfcfa57f443be45df53c678623, type: 2}
   Type: 1
   DisplayCondition:
     conditionType: 1
     RequiredGenerator: {fileID: 11400000, guid: 8f1034bfcfa57f443be45df53c678623, type: 2}
-    requiredOwnedCount: 100
+    requiredOwnedCount: 300
   UpgradeValue: 2
   UpgradeVisuals:
     UpgradeIcon: {fileID: 21300000, guid: e1f64c41f95eb994fad3976212f87c68, type: 3}

@@ -10,13 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d506bb38f588514bb1d864cde7df367, type: 3}
-  m_Name: Drillminer_Generator
+  m_Name: 8_Cryon_Beams
   m_EditorClassIdentifier: 
-  GeneratorId: Drillminer
+  GeneratorId: Planetary Cryon Beams
   CostType: 0
-  BaseCost: 100
-  CostGrowth: 10
+  CurrencyRequiredToShowView: 10000000
+  CurrencyRequiredToUnobscureView: 100000000
+  BaseCost: 10000000000
+  CostGrowth: 1.15
   GeneratedCurrencyType: 0
-  BaseGeneratedCurrency: 10
-  BaseRate: 15
-  Icon: {fileID: 21300000, guid: 0838584c52a10e043a8434b14839cbde, type: 3}
+  BaseGeneratedCurrency: 1
+  BaseRate: 7200
+  Icon: {fileID: 21300000, guid: d743418e4b1d4124a8716bb10dc8ac85, type: 3}

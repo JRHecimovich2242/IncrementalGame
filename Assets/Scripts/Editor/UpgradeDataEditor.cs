@@ -2,6 +2,7 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(UpgradeData))]
+[CanEditMultipleObjects]
 public class UpgradeDataEditor : Editor
 {
     private SerializedProperty _upgradeNameProp;

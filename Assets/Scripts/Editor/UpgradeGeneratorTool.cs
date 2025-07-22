@@ -5,8 +5,10 @@ using System.IO;
 
 public class UpgradeGeneratorTool : EditorWindow
 {
+    private int[] SetGeneratorPrereqValues = { 1, 5, 25, 50 };
+
     private GeneratorData targetGenerator;
-    private string upgradeFolder = "Assets/Upgrades/";
+    private string upgradeFolder = "Assets/Resources/Upgrades/";
     private int rateUpgradeCount = 3;
     private int outputUpgradeCount = 3;
     private bool includeAutomationUpgrade = true;
@@ -17,12 +19,17 @@ public class UpgradeGeneratorTool : EditorWindow
     private Sprite rateIcon = null;
     private string rateName = string.Empty;
     private string rateDescription = string.Empty;
+    private double rateBaseCost = 100;
+    private double rateCostMultiplier = 3;
     private Sprite outputIcon = null;
     private string outputName = string.Empty;
     private string outputDescription = string.Empty;
+    private double outputUpgradeBaseCost = 100;
+    private double outputUpgradeCostMultiplier = 3;
     private Sprite automationIcon = null;
     private string automationName = string.Empty;
     private string automationDescription = string.Empty;
+    private double automationUpgradeCost = 100;
 
     private GeneratorData prerequisiteGenerator;
     private int prerequisiteAmount;
@@ -60,13 +67,13 @@ public class UpgradeGeneratorTool : EditorWindow
         EditorGUILayout.Space(8);
         GUILayout.Label("Upgrade Settings", EditorStyles.boldLabel);
 
-        baseCost = EditorGUILayout.DoubleField("Base Cost", baseCost);
-        costMultiplier = EditorGUILayout.DoubleField("Cost Multiplier", costMultiplier);
 
         EditorGUILayout.Space(6);
         rateUpgradeCount = EditorGUILayout.IntField("Rate Upgrades", rateUpgradeCount);
         rateMultiplier = EditorGUILayout.FloatField("Rate Multiplier Per Upgrade", rateMultiplier);
         rateName = EditorGUILayout.TextField("Rate Upgrade Name", rateName);
+        rateBaseCost = EditorGUILayout.DoubleField("Base Cost", baseCost);
+        rateCostMultiplier = EditorGUILayout.DoubleField("Cost Multiplier", costMultiplier);
         rateDescription = EditorGUILayout.TextField("Rate Upgrade Description", rateDescription);
         rateIcon = (Sprite)EditorGUILayout.ObjectField("Rate Upgrade Icon", rateIcon, typeof(Sprite), false);
 
@@ -74,10 +81,13 @@ public class UpgradeGeneratorTool : EditorWindow
         outputMultiplier = EditorGUILayout.FloatField("Output Multiplier Per Upgrade", outputMultiplier);
         outputName = EditorGUILayout.TextField("Output Upgrade Name", outputName);
         outputDescription = EditorGUILayout.TextField("Output Upgrade Description", outputDescription);
+        outputUpgradeBaseCost = EditorGUILayout.DoubleField("Base Cost", baseCost);
+        outputUpgradeCostMultiplier = EditorGUILayout.DoubleField("Cost Multiplier", costMultiplier);
         outputIcon = (Sprite)EditorGUILayout.ObjectField("Output Upgrade Icon", outputIcon, typeof(Sprite), false);
 
         includeAutomationUpgrade = EditorGUILayout.Toggle("Include Automation Upgrade", includeAutomationUpgrade);
         automationName = EditorGUILayout.TextField("Automation Upgrade Name", automationName);
+        automationUpgradeCost = EditorGUILayout.DoubleField("Base Cost", automationUpgradeCost);
         automationDescription = EditorGUILayout.TextField("Automation Upgrade Description", automationDescription);
         automationIcon = (Sprite)EditorGUILayout.ObjectField("Automation Upgrade Icon", automationIcon, typeof(Sprite), false);
 
@@ -115,9 +125,9 @@ public class UpgradeGeneratorTool : EditorWindow
         for (int i = 0; i < rateUpgradeCount; i++)
         {
             CreateUpgrade($"{rateName} {i + 1}", rateDescription,
-                UpgradeType.RateUpgrade, targetGenerator, currentCost, rateMultiplier, upgradeNumber++, rateIcon, prerequisiteGenerator, prerequisitesRequired);
+                UpgradeType.RateUpgrade, targetGenerator, currentCost, rateMultiplier, upgradeNumber++, rateIcon, prerequisiteGenerator, i < SetGeneratorPrereqValues.Length ? SetGeneratorPrereqValues[i] : prerequisitesRequired);
             currentCost *= costMultiplier;
-            prerequisitesRequired = prerequisiteAmount * prerequisiteScalar * i;
+            prerequisitesRequired += prerequisiteScalar;
         }
 
         upgradeNumber = 0;
@@ -126,9 +136,9 @@ public class UpgradeGeneratorTool : EditorWindow
         for (int i = 0; i < outputUpgradeCount; i++)
         {
             CreateUpgrade($"{outputName} {i + 1}", outputDescription,
-                UpgradeType.AmountUpgrade, targetGenerator, currentCost, outputMultiplier, upgradeNumber++, outputIcon, prerequisiteGenerator, prerequisitesRequired);
+                UpgradeType.AmountUpgrade, targetGenerator, currentCost, outputMultiplier, upgradeNumber++, outputIcon, prerequisiteGenerator, i < SetGeneratorPrereqValues.Length ? SetGeneratorPrereqValues[i] : prerequisitesRequired);
             currentCost *= costMultiplier;
-            prerequisitesRequired = prerequisiteAmount * prerequisiteScalar * i;
+            prerequisitesRequired += prerequisiteScalar;
         }
 
         upgradeNumber = 0;
@@ -147,24 +157,27 @@ public class UpgradeGeneratorTool : EditorWindow
 
     private void ApplyPreset()
     {
-        if (preset == null) return;
-        rateUpgradeCount = preset.rateUpgradeCount;
-        outputUpgradeCount = preset.outputUpgradeCount;
-        includeAutomationUpgrade = preset.includeAutomationUpgrade;
-        baseCost = preset.baseCost;
-        costMultiplier = preset.costMultiplier;
-        rateMultiplier = preset.rateMultiplier;
-        outputMultiplier = preset.outputMultiplier;
+        if (preset == null) 
+        { 
+            return; 
+        }
+
+        rateUpgradeCount = preset.RateUpgradeCount;
+        outputUpgradeCount = preset.OutputUpgradeCount;
+        includeAutomationUpgrade = preset.IncludeAutomationUpgrade;
+        rateMultiplier = preset.RateMultiplier;
+        outputMultiplier = preset.OutputMultiplier;
         selectedCurrency = preset.currencyType;
-        rateName = preset.rateName;
-        rateDescription = preset.rateDescription;
-        rateIcon = preset.rateIcon;
-        outputName = preset.outputName;
-        outputDescription = preset.outputDescription;
-        outputIcon = preset.outputIcon;
-        automationName = preset.automationName;
-        automationDescription = preset.automationDescription;
-        automationIcon = preset.automationIcon;
+        rateName = preset.RateName;
+        rateDescription = preset.RateDescription;
+        rateIcon = preset.RateIcon;
+        outputName = preset.OutputName;
+        outputDescription = preset.OutputDescription;
+        outputUpgradeBaseCost = preset.OutputBaseCost;
+        outputIcon = preset.OutputIcon;
+        automationName = preset.AutomationName;
+        automationDescription = preset.AutomationDescription;
+        automationIcon = preset.AutomationIcon;
 
     }
 

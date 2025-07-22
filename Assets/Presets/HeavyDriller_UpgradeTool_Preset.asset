@@ -12,22 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d49877b289d886e428597af034321100, type: 3}
   m_Name: HeavyDriller_UpgradeTool_Preset
   m_EditorClassIdentifier: 
-  rateUpgradeCount: 10
-  outputUpgradeCount: 10
-  includeAutomationUpgrade: 1
-  baseCost: 500
-  costMultiplier: 4
-  rateMultiplier: 0.95
-  outputMultiplier: 2
+  RateUpgradeCount: 10
+  OutputUpgradeCount: 10
+  IncludeAutomationUpgrade: 1
+  RateMultiplier: 1.25
+  OutputMultiplier: 2
+  OutputBaseCost: 500
+  OutputCostMultiplier: 2
+  RateBaseCost: 500
+  RateCostMultiplier: 2
+  AutomationCost: 100
   currencyType: 0
-  rateName: Charging Prisms
-  rateDescription: Charging prisms overclock drills, heavy drillers are twice as
+  RateName: Charging Prisms
+  RateDescription: Charging prisms overclock drills, heavy drillers are twice as
     efficient
-  rateIcon: {fileID: 21300000, guid: b1c4dc4cda140384ea912b1d7a2fb2ad, type: 3}
-  outputName: Output Boost
-  outputDescription: Fiery prisms melt rock with ease and double heavy driller output
-  outputIcon: {fileID: 21300000, guid: e1f64c41f95eb994fad3976212f87c68, type: 3}
-  automationName: Luminescent Prism
-  automationDescription: Luminescent prisms provide infinite energy allowing drillers
+  RateIcon: {fileID: 21300000, guid: b1c4dc4cda140384ea912b1d7a2fb2ad, type: 3}
+  OutputName: Superheated Prisms
+  OutputDescription: Fiery prisms melt rock with ease and double heavy driller output
+  OutputIcon: {fileID: 21300000, guid: e1f64c41f95eb994fad3976212f87c68, type: 3}
+  AutomationName: Luminescent Prism
+  AutomationDescription: Luminescent prisms provide infinite energy allowing drillers
     to work automatically
-  automationIcon: {fileID: 21300000, guid: 23984a6a3fecd5248b04f430ab78a6d6, type: 3}
+  AutomationIcon: {fileID: 21300000, guid: 23984a6a3fecd5248b04f430ab78a6d6, type: 3}
