@@ -8,7 +8,7 @@ using UnityEngine;
 public class GeneratorSaveEntry
 {
     public string GeneratorId;
-    public int Count;
+    public HugeInt Count;
     public long LastActivationTimeBinary;
     public double GenerationProgressOnQuit;
 }
@@ -23,7 +23,7 @@ public class UpgradeSaveEntry
 public class CurrencySaveEntry
 {
     public string CurrencyId;
-    public double Amount;
+    public HugeInt Amount;
 }
 
 [Serializable]
@@ -41,25 +41,30 @@ public class GameState : Singleton<GameState>
     [Header("Default State (used if no save found)")]
     [SerializeField] private DefaultGameState defaultGameState;
 
-    public Dictionary<GeneratorData, int> OwnedGeneratorDict = new();
+    public Dictionary<GeneratorData, HugeInt> OwnedGeneratorDict = new();
     [HideInInspector] public List<UpgradeData> PurchasedUpgrades = new();
     public TimeSpan OfflineElapsed { get; private set; }
 
     public Action<GeneratorData> OnGeneratorPurchasedAction;
     public Action<UpgradeData> OnUpgradePurchasedAction;
-    private Dictionary<CurrencyType, double> _currencySnapshot = new();
-    private Dictionary<CurrencyType, double> _lifetimeCurrencySnapshot = new();
+    private Dictionary<CurrencyType, HugeInt> _currencySnapshot = new();
+    private Dictionary<CurrencyType, HugeInt> _lifetimeCurrencySnapshot = new();
     private GameManager _gameManager = null;
     private DateTime _startupTime;
     // Path to our savefile:
     private string SaveFilePath =>
         Path.Combine(Application.persistentDataPath, "savegame.json");
 
-    public void OnPurchaseGenerator(GeneratorData data, int numPurchased = 1)
+    public void OnPurchaseGenerator(GeneratorData data, long numPurchased)
+    {
+        OnPurchaseGenerator(data, (HugeInt)numPurchased);
+    }
+
+    public void OnPurchaseGenerator(GeneratorData data, HugeInt numPurchased)
     {
         if (!OwnedGeneratorDict.ContainsKey(data))
         {
-            OwnedGeneratorDict.Add(data, 0);
+            OwnedGeneratorDict.Add(data, HugeInt.Zero);
         }
 
         OwnedGeneratorDict[data] += numPurchased;
@@ -166,7 +171,7 @@ public class GameState : Singleton<GameState>
         }
 
         // --- Currencies ---
-        var currencyDict = new Dictionary<CurrencyType, double>();
+        var currencyDict = new Dictionary<CurrencyType, HugeInt>();
         foreach (var def in defaultGameState.defaultCurrencies)
         {
             currencyDict[def.currencyType] = def.amount;
@@ -255,18 +260,18 @@ public class GameState : Singleton<GameState>
         }
     }
 
-    private void OnCurrencyChanged(CurrencyType type, double value)
+    private void OnCurrencyChanged(CurrencyType type, HugeInt value)
     {
         if(!_currencySnapshot.ContainsKey(type))
         {
-            _currencySnapshot.Add(type, 0);
+            _currencySnapshot.Add(type, HugeInt.Zero);
         }
         else if(value > _currencySnapshot[type])
         {
             // Currency gained, update lifetime snapshot
             if (!_lifetimeCurrencySnapshot.ContainsKey(type))
             {
-                _lifetimeCurrencySnapshot.Add(type, 0);
+                _lifetimeCurrencySnapshot.Add(type, HugeInt.Zero);
             }
 
             _currencySnapshot[type] = value - _currencySnapshot[type];

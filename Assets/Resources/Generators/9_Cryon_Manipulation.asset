@@ -13,10 +13,16 @@ MonoBehaviour:
   m_Name: 9_Cryon_Manipulation
   m_EditorClassIdentifier: 
   GeneratorId: Planetary Cryon Manipulation
+  GeneratorDescription: Safety be damned, we can manipulate the fabric of space and
+    time for profit!
   CostType: 0
   CurrencyRequiredToShowView: 100000000
-  CurrencyRequiredToUnobscureView: 1000000000
+  CurrencyRequiredToUnobscureView: 10000000000
   BaseCost: 1000000000000
+  BaseCost_HugeInt:
+    _serialized: 1000000000000
+  CostGrowthNumerator: 115
+  CostGrowthDenominator: 100
   CostGrowth: 1.15
   GeneratedCurrencyType: 0
   BaseGeneratedCurrency: 100000000000000

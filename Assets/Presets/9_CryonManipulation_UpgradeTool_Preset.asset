@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d49877b289d886e428597af034321100, type: 3}
+  m_Name: 9_CryonManipulation_UpgradeTool_Preset
+  m_EditorClassIdentifier: 
+  RateUpgradeCount: 20
+  OutputUpgradeCount: 20
+  IncludeAutomationUpgrade: 1
+  RateMultiplier: 1.25
+  OutputMultiplier: 2
+  OutputBaseCost: 50000000000
+  OutputCostMultiplier: 1.5
+  RateBaseCost: 50000000000
+  RateCostMultiplier: 1.5
+  AutomationCost: 500000000000
+  currencyType: 0
+  RateName: Fusion Core
+  RateDescription: Advanced fusion tech allows for direct molecular intervention.
+    Cryon manipulation is now 25% faster
+  RateIcon: {fileID: 21300000, guid: 4045148847784ac409fe7523a67c0872, type: 3}
+  OutputName: Jarred Lightning
+  OutputDescription: Literal lightning-in-a-bottle optimizes manipulations and doubles
+    their output
+  OutputIcon: {fileID: 21300000, guid: 23b97ffb49b0fd649b71cc58f8b736d1, type: 3}
+  AutomationName: Whispering Lantern
+  AutomationDescription: Forces beyond our understanding conduct cryon warping procedures
+    on their own. Cryon manipulation now begins automatically.
+  AutomationIcon: {fileID: 21300000, guid: 4e9eb01e6d18d544da790aa7be59149d, type: 3}

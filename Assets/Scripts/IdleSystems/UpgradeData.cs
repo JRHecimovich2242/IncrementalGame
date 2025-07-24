@@ -78,7 +78,7 @@ public class UpgradeData : ScriptableObject
     public string UpgradeName = string.Empty;
     public string UpgradeDescription = string.Empty;
     public CurrencyType CostType;
-    public double Cost;
+    public HugeInt Cost;
     public GeneratorData TargetGenerator = null;
     public UpgradeType Type = UpgradeType.RateUpgrade;
     public UpgradeDisplayCondition DisplayCondition;

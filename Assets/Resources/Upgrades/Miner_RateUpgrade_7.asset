@@ -15,7 +15,8 @@ MonoBehaviour:
   UpgradeName: Laser Pickaxes 8
   UpgradeDescription: Upgraded pickaxes increase mining speed. Miners are 25% faster
   CostType: 0
-  Cost: 109350
+  Cost:
+    _serialized: 163
   TargetGenerator: {fileID: 11400000, guid: a45bc8254c19c914ebb0b9fe85ad1e8d, type: 2}
   Type: 0
   DisplayCondition:

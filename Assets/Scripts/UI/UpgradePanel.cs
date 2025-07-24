@@ -36,7 +36,7 @@ public class UpgradePanel : MonoBehaviour
         }
     }
 
-    public void RefreshUpgradeAffordability(CurrencyType typeToCheck, double currencyHeld)
+    public void RefreshUpgradeAffordability(CurrencyType typeToCheck, HugeInt currencyHeld)
     {
         foreach (var view in _views)
         {

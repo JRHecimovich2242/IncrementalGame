@@ -15,7 +15,8 @@ MonoBehaviour:
   UpgradeName: Superheated Prisms 1
   UpgradeDescription: Fiery prisms melt rock with ease and double heavy driller output
   CostType: 0
-  Cost: 50
+  Cost:
+    _serialized: 500
   TargetGenerator: {fileID: 11400000, guid: 8f1034bfcfa57f443be45df53c678623, type: 2}
   Type: 1
   DisplayCondition:

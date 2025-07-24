@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d49877b289d886e428597af034321100, type: 3}
+  m_Name: 6_PlanetaryDrills_UpgradeTool_Preset
+  m_EditorClassIdentifier: 
+  RateUpgradeCount: 20
+  OutputUpgradeCount: 20
+  IncludeAutomationUpgrade: 1
+  RateMultiplier: 1.25
+  OutputMultiplier: 2
+  OutputBaseCost: 5000000
+  OutputCostMultiplier: 1.5
+  RateBaseCost: 5000000
+  RateCostMultiplier: 1.5
+  AutomationCost: 50000000
+  currencyType: 0
+  RateName: Fossil Fuels
+  RateDescription: Earth-made fossil fuels can be burned twice as hot, planetary
+    drills are 25% faster.
+  RateIcon: {fileID: 21300000, guid: da4e19802b5e40a49b8eca2b0b90c0e6, type: 3}
+  OutputName: Booster Nozzles
+  OutputDescription: Enhanced propulsion increases drilling yield, doubling planetary
+    drill output
+  OutputIcon: {fileID: 21300000, guid: 50586f4c5f06c5143ac7210406c20720, type: 3}
+  AutomationName: Ingenious Toolbox
+  AutomationDescription: State-of-the-art engineering equipment allows for drill
+    maintenance to be performed around the clock. Planetary drills now function automatically.
+  AutomationIcon: {fileID: 21300000, guid: f5eae6f58b61d6d46960dbe4a63e2cab, type: 3}

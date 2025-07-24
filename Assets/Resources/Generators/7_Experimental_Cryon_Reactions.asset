@@ -13,12 +13,18 @@ MonoBehaviour:
   m_Name: 7_Experimental_Cryon_Reactions
   m_EditorClassIdentifier: 
   GeneratorId: Experimental Cryon Reactions
+  GeneratorDescription: These cryon crystals have incredible self-replicating properties.
+    I smell profit!
   CostType: 0
   CurrencyRequiredToShowView: 5000000
   CurrencyRequiredToUnobscureView: 10000000
-  BaseCost: 1000000000
+  BaseCost: 100000000
+  BaseCost_HugeInt:
+    _serialized: 100000000
+  CostGrowthNumerator: 115
+  CostGrowthDenominator: 100
   CostGrowth: 1.15
   GeneratedCurrencyType: 0
   BaseGeneratedCurrency: 10000000000
   BaseRate: 3600
-  Icon: {fileID: 21300000, guid: 7c3dd002bc54798459bb6b4df1572688, type: 3}
+  Icon: {fileID: 21300000, guid: 4896ea6e7c3547e47b448905fbb88caa, type: 3}

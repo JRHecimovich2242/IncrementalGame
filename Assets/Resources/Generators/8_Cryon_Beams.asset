@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: 8_Cryon_Beams
   m_EditorClassIdentifier: 
   GeneratorId: Planetary Cryon Beams
+  GeneratorDescription: Orbital lasers optimized for precision mining.
   CostType: 0
   CurrencyRequiredToShowView: 10000000
   CurrencyRequiredToUnobscureView: 100000000
   BaseCost: 10000000000
+  BaseCost_HugeInt:
+    _serialized: 10000000000
+  CostGrowthNumerator: 115
+  CostGrowthDenominator: 100
   CostGrowth: 1.15
   GeneratedCurrencyType: 0
   BaseGeneratedCurrency: 1

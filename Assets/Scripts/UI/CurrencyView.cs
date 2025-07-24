@@ -17,10 +17,10 @@ public class CurrencyView : MonoBehaviour
     public void Initialize()
     {
         CurrencyManager.Instance.OnCurrencyChanged += OnCurrencyChanged;
-        Refresh(0);
+        Refresh(HugeInt.Zero);
     }
 
-    private void OnCurrencyChanged(CurrencyType changedType, double value)
+    private void OnCurrencyChanged(CurrencyType changedType, HugeInt value)
     {
         if(changedType == _currencyType)
         {
@@ -28,8 +28,8 @@ public class CurrencyView : MonoBehaviour
         }
     }
 
-    public void Refresh(double value)
+    public void Refresh(HugeInt value)
     {
-        currencyText.text = displayPrefix + value.ToString() + displaySuffix;
+        currencyText.text = displayPrefix + CurrencyManager.ConvertHugeIntCurrencyToString(value) + displaySuffix;
     }
 }

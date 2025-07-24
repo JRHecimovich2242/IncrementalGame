@@ -47,11 +47,11 @@ public class GameManager : Singleton<GameManager>
                 UIManager.Instance.SpawnGeneratorUI(newEntity);
             }
 
-            if(GameState.Instance.OwnedGeneratorDict.TryGetValue(data, out int savedValue))
+            if(GameState.Instance.OwnedGeneratorDict.TryGetValue(data, out HugeInt savedValue))
             {
-                if(savedValue > 0)
+                if(savedValue > HugeInt.Zero)
                 {
-                    newEntity.SetNumOwned((uint)savedValue);
+                    newEntity.SetNumOwned(savedValue);
                 }
             }
         }
@@ -59,7 +59,7 @@ public class GameManager : Singleton<GameManager>
         if(GameState.Instance.OwnedGeneratorDict.Count == 0)
         {
             // If first startup, init with one clicker generator
-            generatorEntities.Find(x => x.Id == ClickerGeneratorName).SetNumOwned(1);
+            generatorEntities.Find(x => x.Id == ClickerGeneratorName).SetNumOwned(HugeInt.One);
         }
 
         List<UpgradeData> upgradeDataList = Resources.LoadAll<UpgradeData>("Upgrades/").ToList();

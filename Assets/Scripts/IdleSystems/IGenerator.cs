@@ -2,8 +2,8 @@ public interface IGenerator
 {
     bool IsActive { get; }
     string Id { get; }
-    uint NumOwned { get; }
-    double CurrentAmount { get; }
+    HugeInt NumOwned { get; }
+    HugeInt CurrentAmount { get; }
     double TimeToGenerate { get; }
     double CurrentGenerationProgress { get; }
     float ActivationTime { get; }

@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d49877b289d886e428597af034321100, type: 3}
+  m_Name: 7_ExperimentalCryonReactions_UpgradeTool_Preset
+  m_EditorClassIdentifier: 
+  RateUpgradeCount: 20
+  OutputUpgradeCount: 20
+  IncludeAutomationUpgrade: 1
+  RateMultiplier: 1.25
+  OutputMultiplier: 2
+  OutputBaseCost: 50000000
+  OutputCostMultiplier: 1.5
+  RateBaseCost: 50000000
+  RateCostMultiplier: 1.5
+  AutomationCost: 500000000
+  currencyType: 0
+  RateName: Unstable Isotope
+  RateDescription: An unstable material added to the reaction increases reaction
+    speed by 25%
+  RateIcon: {fileID: 21300000, guid: 31fde2ccf7e71ff4086bd8fedf115b43, type: 3}
+  OutputName: Red Matter Duplicator
+  OutputDescription: Red matter tech doubles cryon reaction output
+  OutputIcon: {fileID: 21300000, guid: d0ba700c52389e24abbe4c0ba3cb9ea9, type: 3}
+  AutomationName: Critical Mass
+  AutomationDescription: Scientific breakthroughs allow cryon reactions to become
+    self-sustaining. Experimental Cryon Reactions now function automatically
+  AutomationIcon: {fileID: 21300000, guid: 29a3ad58cd518c34eb89aaf7c62cdefc, type: 3}

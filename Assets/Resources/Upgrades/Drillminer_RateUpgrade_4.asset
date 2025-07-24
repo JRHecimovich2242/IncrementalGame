@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Drillminer_RateUpgrade_4
   m_EditorClassIdentifier: 
   UpgradeName: Blackpowder Bags 5
-  UpgradeDescription: Improved explosive materials increase Drillminer speed
+  UpgradeDescription: Improved explosive materials increase Drillminer speed by 25%
   CostType: 0
-  Cost: 4050
+  Cost:
+    _serialized: 252
   TargetGenerator: {fileID: 11400000, guid: 7c9911d77f83b02459ac1de9bd2fe3e9, type: 2}
   Type: 0
   DisplayCondition:

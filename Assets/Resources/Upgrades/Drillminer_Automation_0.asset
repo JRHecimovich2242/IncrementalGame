@@ -16,7 +16,8 @@ MonoBehaviour:
   UpgradeDescription: The promise of shiny jewels motivates Drillminers to begin
     work automatically
   CostType: 0
-  Cost: 500
+  Cost:
+    _serialized: 500
   TargetGenerator: {fileID: 11400000, guid: 7c9911d77f83b02459ac1de9bd2fe3e9, type: 2}
   Type: 2
   DisplayCondition:

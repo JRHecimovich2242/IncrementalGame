@@ -25,8 +25,7 @@ public class UpgradePurchaseView : MonoBehaviour
 
         if(upgradeCostText != null)
         {
-            upgradeCostText.text = _upgradeData.Cost.ToString();
-            // TODO: Icon based on currency needed
+            upgradeCostText.text = CurrencyManager.ConvertHugeIntCurrencyToString(_upgradeData.Cost);
         }
 
         if(upgradeDescriptionText != null)
@@ -69,7 +68,7 @@ public class UpgradePurchaseView : MonoBehaviour
         }
     }
 
-    public void CheckAffordability(CurrencyType typeToCheck, double currValue)
+    public void CheckAffordability(CurrencyType typeToCheck, HugeInt currValue)
     {
         if (!gameObject.activeSelf)
         {

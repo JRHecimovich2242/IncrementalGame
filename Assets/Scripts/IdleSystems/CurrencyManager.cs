@@ -4,8 +4,24 @@ using UnityEngine;
 
 public class CurrencyManager : Singleton<CurrencyManager>
 {
+    public const int CURRENCY_SIG_FIGS = 3;
+    public const int SCIENTIFIC_NOTATION_THRESHOLD = 1000000000;
+    
+
+    public static string ConvertHugeIntCurrencyToString(HugeInt value)
+    {
+        if (value > CurrencyManager.SCIENTIFIC_NOTATION_THRESHOLD)
+        {
+            return value.ToScientificString(CurrencyManager.CURRENCY_SIG_FIGS);
+        }
+        else
+        {
+            return value.ToString();
+        }
+    }
+
     private readonly Dictionary<CurrencyType, ICurrency> currencies = new();
-    public event Action<CurrencyType, double> OnCurrencyChanged;
+    public event Action<CurrencyType, HugeInt> OnCurrencyChanged;
 
     public void AddNewCurrency(ICurrency newCurrency)
     {
@@ -19,7 +35,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
         OnCurrencyChanged?.Invoke(newCurrency.Type, newCurrency.Amount);
     }
 
-    public void ModifyCurrency(CurrencyType currencyType, double value)
+    public void ModifyCurrency(CurrencyType currencyType, HugeInt value)
     {
         if (!currencies.ContainsKey(currencyType))
         {
@@ -39,7 +55,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
         OnCurrencyChanged?.Invoke(currencyType, GetCurrency(currencyType));
     }
 
-    public bool TrySpendCurrency(CurrencyType currencyType, double value)
+    public bool TrySpendCurrency(CurrencyType currencyType, HugeInt value)
     {
         if (!currencies.ContainsKey(currencyType))
         {
@@ -56,14 +72,14 @@ public class CurrencyManager : Singleton<CurrencyManager>
         return spendSuccessful;
     }
 
-    public double GetCurrency(CurrencyType currencyType)
+    public HugeInt GetCurrency(CurrencyType currencyType)
     { 
         return currencies.TryGetValue(currencyType, out ICurrency currency) ? currency.Amount : 0; 
     }
 
-    public Dictionary<CurrencyType, double> GetAll()
+    public Dictionary<CurrencyType, HugeInt> GetAll()
     {
-        var copy = new Dictionary<CurrencyType, double>(currencies.Count);
+        var copy = new Dictionary<CurrencyType, HugeInt>(currencies.Count);
 
         foreach (var kvp in currencies)
         {
@@ -73,7 +89,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
         return copy;
     }
 
-    public void LoadAll(Dictionary<string, double> currencyDict)
+    public void LoadAll(Dictionary<string, HugeInt> currencyDict)
     {
         foreach (var kvp in currencyDict)
         {
@@ -84,7 +100,7 @@ public class CurrencyManager : Singleton<CurrencyManager>
             }
         }
     }
-    public void LoadAll(Dictionary<CurrencyType, double> currencyDict)
+    public void LoadAll(Dictionary<CurrencyType, HugeInt> currencyDict)
     {
         foreach (var kvp in currencyDict)
         {

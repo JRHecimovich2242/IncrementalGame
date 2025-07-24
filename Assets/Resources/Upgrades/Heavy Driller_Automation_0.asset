@@ -16,7 +16,8 @@ MonoBehaviour:
   UpgradeDescription: Luminescent prisms provide infinite energy allowing drillers
     to work automatically
   CostType: 0
-  Cost: 5000
+  Cost:
+    _serialized: 5000
   TargetGenerator: {fileID: 11400000, guid: 8f1034bfcfa57f443be45df53c678623, type: 2}
   Type: 2
   DisplayCondition:

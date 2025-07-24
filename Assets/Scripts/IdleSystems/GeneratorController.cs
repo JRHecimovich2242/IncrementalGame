@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GeneratorController : MonoBehaviour
 {
+    private const double RapidGenerationThreshold = 1f;
+
     private GeneratorEntity _model;
     private GeneratorView _view;
     private GeneratorDirtyFlags pendingFlags;
@@ -17,7 +19,7 @@ public class GeneratorController : MonoBehaviour
         _view = view;
         _view.SetIconSprite(model.Data.Icon);
         _view.SetName(model.Id);
-
+        _view.SetDescription(model.Data.GeneratorDescription);
         _view.SetObscured(_model.ShouldObscure());
         _view.SetViewActive(_model.CanShow());
 
@@ -62,7 +64,7 @@ public class GeneratorController : MonoBehaviour
 
         if (pendingFlags.HasFlag(GeneratorDirtyFlags.AmountGenerated))
         {
-            _view.UpdateRateText(_model.CurrentAmount);
+            _view.UpdateAmountGeneratedText(_model.CurrentAmount);
         }
 
         if (pendingFlags.HasFlag(GeneratorDirtyFlags.OwnedCount))
@@ -87,10 +89,22 @@ public class GeneratorController : MonoBehaviour
             _view.DisplayGenerationCompleteVisual();
         }
 
+        if (pendingFlags.HasFlag(GeneratorDirtyFlags.RateDirty))
+        {
+            if (_view.RapidDisplay && _model.TimeToGenerate > RapidGenerationThreshold)
+            {
+                _view.SetRapidGeneration(false);
+            }
+            else if(!_view.RapidDisplay && _model.TimeToGenerate <= RapidGenerationThreshold)
+            {
+                _view.SetRapidGeneration(true);
+            }
+        }
+
         pendingFlags = GeneratorDirtyFlags.None;
     }
 
-    private void OnCurrencyChanged(CurrencyType type, double value)
+    private void OnCurrencyChanged(CurrencyType type, HugeInt value)
     {
         if(type == _model.Data.CostType)
         {
@@ -110,7 +124,7 @@ public class GeneratorController : MonoBehaviour
 
     private void RefreshCostView()
     {
-        double currentCost = _model.GetCostToPurchase(purchaseAmount);
+        HugeInt currentCost = _model.GetCostToPurchase((System.Numerics.BigInteger)purchaseAmount);
         bool canAfford = CurrencyManager.Instance.GetCurrency(_model.Data.CostType) >= currentCost;
         _view.SetCostText(currentCost, canAfford);
     }

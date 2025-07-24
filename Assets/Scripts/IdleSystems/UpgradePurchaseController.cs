@@ -40,7 +40,7 @@ public class UpgradePurchaseController : MonoBehaviour
         }
     }
 
-    private void OnCurrencyChanged(CurrencyType type, double newValue)
+    private void OnCurrencyChanged(CurrencyType type, HugeInt newValue)
     {
         _upgradeView.CheckAffordability(type, newValue);
     }

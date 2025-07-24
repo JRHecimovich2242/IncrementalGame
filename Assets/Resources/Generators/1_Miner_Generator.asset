@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: 1_Miner_Generator
   m_EditorClassIdentifier: 
   GeneratorId: Miner
+  GeneratorDescription: Rank-and-file workers contracted to dig for the CMC
   CostType: 0
   CurrencyRequiredToShowView: 0
   CurrencyRequiredToUnobscureView: 0
   BaseCost: 10
+  BaseCost_HugeInt:
+    _serialized: 10
+  CostGrowthNumerator: 115
+  CostGrowthDenominator: 100
   CostGrowth: 1.15
   GeneratedCurrencyType: 0
   BaseGeneratedCurrency: 1

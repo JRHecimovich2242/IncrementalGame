@@ -16,7 +16,8 @@ MonoBehaviour:
   UpgradeDescription: Increased rations allow for longer shifts and more output per
     miner! Miners are twice as efficient.
   CostType: 0
-  Cost: 984150
+  Cost:
+    _serialized: 366
   TargetGenerator: {fileID: 11400000, guid: a45bc8254c19c914ebb0b9fe85ad1e8d, type: 2}
   Type: 1
   DisplayCondition:

@@ -115,16 +115,16 @@ public class TutorialObserver : MonoBehaviour
         }
     }
 
-    private void OnCurrencyGenerated_ClickerStep(CurrencyType type, double amount)
+    private void OnCurrencyGenerated_ClickerStep(CurrencyType type, HugeInt amount)
     {
-        if(amount <= 0) { return; }
+        if(amount <= HugeInt.Zero) { return; }
 
         CurrencyManager.Instance.OnCurrencyChanged -= OnCurrencyGenerated_ClickerStep;
         clickPromptUI.SetActive(false);
         StartStep(Step.BuyGenerator);
     }
 
-    private void OnCurrencyChangedForBuy(CurrencyType type, double newBalance)
+    private void OnCurrencyChangedForBuy(CurrencyType type, HugeInt newBalance)
     {
         if (type != CurrencyType.Basic)
         {
@@ -132,7 +132,7 @@ public class TutorialObserver : MonoBehaviour
         }
 
         // check if they can afford exactly one
-        if (newBalance >= dataOfTutorialGenerator.BaseCost)
+        if (newBalance >= (HugeInt)dataOfTutorialGenerator.BaseCost)
         {
             CurrencyManager.Instance.OnCurrencyChanged -= OnCurrencyChangedForBuy;
             buyPromptUI.SetActive(true);
@@ -192,7 +192,7 @@ public class TutorialObserver : MonoBehaviour
         activateRepeatPromptUI.SetActive(false);
         StartStep(Step.HighlightUpgrade);
     }
-    private void OnCurrencyChangedForUpgrade(CurrencyType type, double newBalance)
+    private void OnCurrencyChangedForUpgrade(CurrencyType type, HugeInt newBalance)
     {
         if (type != CurrencyType.Basic)
         {

@@ -15,8 +15,27 @@ public class GeneratorView : MonoBehaviour
     [SerializeField] private TMP_Text costText = null;
     [SerializeField] private TMP_Text numOwnedText = null;
     [SerializeField] private TMP_Text generationRateText = null;
+    [SerializeField] private TMP_Text generatorDescriptionText = null;
+    [SerializeField] private GameObject activationButtonCover = null;
+	[SerializeField] private GameObject normalProgressBarParent = null;
+	[SerializeField] private GameObject rapidGenerationProgressBarParent = null;
 
-    public bool Obscured { get { return obscureCover != null && obscureCover.activeSelf; } }
+	public bool Obscured { get { return obscureCover != null && obscureCover.activeSelf; } }
+
+    public bool RapidDisplay { get { return rapidGenerationProgressBarParent != null && rapidGenerationProgressBarParent.activeSelf; } }
+
+    private void Awake()
+    {
+        SetRapidGeneration(false);
+    }
+
+    public void SetDescription(string descriptionText)
+    {
+        if(generatorDescriptionText != null)
+        {
+            generatorDescriptionText.text = descriptionText;
+        }
+    }
 
     public void DisplayGenerationCompleteVisual()
     {
@@ -57,13 +76,18 @@ public class GeneratorView : MonoBehaviour
         }
     }
 
-    public void SetNumOwned(uint numOwned)
+    public void SetNumOwned(HugeInt numOwned)
     {
-        if (numOwned > 0 && !gameObject.activeSelf)
+        if (activationButtonCover != null)
+        {
+            activationButtonCover.SetActive(numOwned <= HugeInt.Zero);
+        }
+
+        if (numOwned > HugeInt.Zero && !gameObject.activeSelf)
         {
             SetViewActive(true);
         }
-        else if (gameObject.activeSelf && numOwned <= 0)
+        else if (gameObject.activeSelf && numOwned <= HugeInt.Zero)
         {
             //SetEnabled(false);
         }
@@ -85,21 +109,21 @@ public class GeneratorView : MonoBehaviour
         throw new NotImplementedException();
     }
 
-    public void SetCostText(double cost, bool canAfford = true)
+    public void SetCostText(HugeInt cost, bool canAfford = true)
     {
         if(costText != null)
         {
-            costText.text = cost.ToString();
+            costText.text = CurrencyManager.ConvertHugeIntCurrencyToString(cost);
 
             costText.color = canAfford ? CAN_AFFORD_COLOR : CANT_AFFORD_COLOR;
         }
     }
 
-    public void UpdateRateText(double amountGenerated)
+    public void UpdateAmountGeneratedText(HugeInt amountGenerated)
     {
         if(generationRateText != null)
         {
-            generationRateText.text = amountGenerated.ToString();
+            generationRateText.text = CurrencyManager.ConvertHugeIntCurrencyToString(amountGenerated);
         }
     }
 
@@ -110,4 +134,17 @@ public class GeneratorView : MonoBehaviour
             obscureCover.SetActive(shouldObscure);
         }
     }
+
+    public void SetRapidGeneration(bool isRapid)
+    {
+		if (normalProgressBarParent != null)
+		{
+			normalProgressBarParent.SetActive(!isRapid);
+		}
+
+		if (rapidGenerationProgressBarParent != null)
+		{
+			rapidGenerationProgressBarParent.SetActive(isRapid);
+		}
+	}
 }

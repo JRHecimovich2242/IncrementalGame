@@ -13,10 +13,15 @@ MonoBehaviour:
   m_Name: 4_Industrial_Machinery_Generator
   m_EditorClassIdentifier: 
   GeneratorId: Industrial Machinery
+  GeneratorDescription: Heavy machinery to ramp up cryon crystal production
   CostType: 0
   CurrencyRequiredToShowView: 1000
   CurrencyRequiredToUnobscureView: 2000
   BaseCost: 10000
+  BaseCost_HugeInt:
+    _serialized: 10000
+  CostGrowthNumerator: 115
+  CostGrowthDenominator: 100
   CostGrowth: 1.15
   GeneratedCurrencyType: 0
   BaseGeneratedCurrency: 10000

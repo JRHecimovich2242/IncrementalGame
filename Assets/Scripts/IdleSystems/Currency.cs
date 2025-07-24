@@ -7,29 +7,29 @@ public enum CurrencyType
 public interface ICurrency
 {
     CurrencyType Type { get; }
-    double Amount { get; }
-    void Add(double amount);
-    bool Spend(double amount);
+    HugeInt Amount { get; }
+    void Add(HugeInt amount);
+    bool Spend(HugeInt amount);
 }
 
 public class SimpleCurrency : ICurrency
 {
     public CurrencyType Type { get; private set; }
 
-    public double Amount { get; private set; }
+    public HugeInt Amount { get; private set; }
 
-    public SimpleCurrency(CurrencyType type, double startingAmount)
+    public SimpleCurrency(CurrencyType type, HugeInt startingAmount)
     {
         Type = type;
         Amount = startingAmount;
     }
 
-    public virtual void Add(double amount)
+    public virtual void Add(HugeInt amount)
     {
         Amount += amount;
     }
 
-    public virtual bool Spend(double amount)
+    public virtual bool Spend(HugeInt amount)
     {
         if(amount > Amount)
         {

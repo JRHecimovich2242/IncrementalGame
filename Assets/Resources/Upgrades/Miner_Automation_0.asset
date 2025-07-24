@@ -15,7 +15,8 @@ MonoBehaviour:
   UpgradeName: Juicy Co. Energy Drink
   UpgradeDescription: Miners now generate scrap automatically
   CostType: 0
-  Cost: 200
+  Cost:
+    _serialized: 50
   TargetGenerator: {fileID: 11400000, guid: a45bc8254c19c914ebb0b9fe85ad1e8d, type: 2}
   Type: 2
   DisplayCondition:

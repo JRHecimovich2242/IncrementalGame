@@ -13,12 +13,17 @@ MonoBehaviour:
   m_Name: 6_Planetary_Drills
   m_EditorClassIdentifier: 
   GeneratorId: Planetary Drills
+  GeneratorDescription: Massive planet-scale drills will let us dig like never before
   CostType: 0
   CurrencyRequiredToShowView: 75000
   CurrencyRequiredToUnobscureView: 1000000
-  BaseCost: 100000000
+  BaseCost: 10000000
+  BaseCost_HugeInt:
+    _serialized: 10000000
+  CostGrowthNumerator: 115
+  CostGrowthDenominator: 100
   CostGrowth: 1.15
   GeneratedCurrencyType: 0
   BaseGeneratedCurrency: 500000000
   BaseRate: 2700
-  Icon: {fileID: 21300000, guid: 7c3dd002bc54798459bb6b4df1572688, type: 3}
+  Icon: {fileID: 21300000, guid: 7e1e580973e7c764085fc996ba39647d, type: 3}

@@ -13,10 +13,16 @@ MonoBehaviour:
   m_Name: 3_Heavy_Driller_Generator
   m_EditorClassIdentifier: 
   GeneratorId: Heavy Driller
+  GeneratorDescription: Heavy Drillers are specialized workers ready to give their
+    lives for cryon production
   CostType: 0
   CurrencyRequiredToShowView: 0
   CurrencyRequiredToUnobscureView: 750
   BaseCost: 1000
+  BaseCost_HugeInt:
+    _serialized: 1000
+  CostGrowthNumerator: 115
+  CostGrowthDenominator: 100
   CostGrowth: 1.15
   GeneratedCurrencyType: 0
   BaseGeneratedCurrency: 100

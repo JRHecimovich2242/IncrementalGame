@@ -16,7 +16,7 @@ public class DefaultGameState : ScriptableObject
     public struct CurrencyDefault
     {
         public CurrencyType currencyType;
-        public double amount;
+        public HugeInt amount;
     }
 
     [Serializable]

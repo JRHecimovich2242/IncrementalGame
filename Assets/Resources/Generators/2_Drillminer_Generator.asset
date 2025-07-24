@@ -13,10 +13,16 @@ MonoBehaviour:
   m_Name: 2_Drillminer_Generator
   m_EditorClassIdentifier: 
   GeneratorId: Drillminer
+  GeneratorDescription: Loose-cannon explosion-addicts ready to scrape the planet
+    for cryon
   CostType: 0
   CurrencyRequiredToShowView: 0
   CurrencyRequiredToUnobscureView: 0
   BaseCost: 100
+  BaseCost_HugeInt:
+    _serialized: 100
+  CostGrowthNumerator: 115
+  CostGrowthDenominator: 100
   CostGrowth: 1.15
   GeneratedCurrencyType: 0
   BaseGeneratedCurrency: 10

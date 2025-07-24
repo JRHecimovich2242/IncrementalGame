@@ -19,10 +19,10 @@ public enum GeneratorDirtyFlags
 public class GeneratorEntity : IGenerator
 {
     public event Action<GeneratorDirtyFlags> OnDirty;
-    public bool IsActive { get { return NumOwned > 0; } }
+    public bool IsActive { get { return NumOwned > HugeInt.Zero; } }
     public string Id { get { return m_data.GeneratorId; } }
-    public uint NumOwned {  get; private set; }
-    public double CurrentAmount 
+    public HugeInt NumOwned {  get; private set; }
+    public HugeInt CurrentAmount 
     {
         get 
         {
@@ -37,7 +37,7 @@ public class GeneratorEntity : IGenerator
             return _currentAmount; 
         } 
     }
-    private double _currentAmount = 0;
+    private HugeInt _currentAmount = HugeInt.Zero;
 
     public double TimeToGenerate => GetTimeToGenerate();
     private double _timeToGenerate = 0;
@@ -54,9 +54,10 @@ public class GeneratorEntity : IGenerator
     public GeneratorEntity(GeneratorData data)
     {
         m_data = data;      
-        NumOwned = 0;
-        _currentAmount = data.BaseGeneratedCurrency;
-        MarkDirty(GeneratorDirtyFlags.All);
+        NumOwned = HugeInt.Zero;
+        _currentAmount = new HugeInt((long)data.BaseGeneratedCurrency);
+		RecalcNextCost();
+		MarkDirty(GeneratorDirtyFlags.All);
     }
 
     public void LoadSavedInfo(GeneratorSaveEntry loadFrom)
@@ -70,7 +71,7 @@ public class GeneratorEntity : IGenerator
                 double secondsElapsedOffline = GameState.Instance.OfflineElapsed.TotalSeconds;
                 if(CurrentGenerationProgress >= 1)
                 {
-                    GenerateCurrency();
+                    GenerateCurrency(HugeInt.One);
                     secondsElapsedOffline -= TimeToGenerate;
                 }
                 else
@@ -80,7 +81,7 @@ public class GeneratorEntity : IGenerator
                     if (secondsElapsedOffline > timeRemainingInOfflineGeneration)
                     {
                         secondsElapsedOffline -= timeRemainingInOfflineGeneration;
-                        GenerateCurrency();
+                        GenerateCurrency(HugeInt.One);
                         CurrentGenerationProgress = 0;
                         MarkDirty(GeneratorDirtyFlags.Progress);
                     }
@@ -92,16 +93,14 @@ public class GeneratorEntity : IGenerator
 
                 if(_automated)
                 {
-                    while (secondsElapsedOffline > TimeToGenerate)
-                    {
-                        // Calculate the number of completions that would have happened in time offline
-                        secondsElapsedOffline -= TimeToGenerate;
-                        GenerateCurrency();
-                    }
+                    int GenerationsToPerform = Mathf.FloorToInt((float)secondsElapsedOffline / (float)TimeToGenerate);
+                    GenerateCurrency(GenerationsToPerform);
 
-                    if(secondsElapsedOffline > 0)
+                    double currentElapsed = secondsElapsedOffline - (TimeToGenerate * GenerationsToPerform);
+
+                    if(currentElapsed > 0)
                     {
-                        CurrentGenerationProgress = secondsElapsedOffline / TimeToGenerate;
+                        CurrentGenerationProgress = currentElapsed / TimeToGenerate;
                         MarkDirty(GeneratorDirtyFlags.Progress);
                     }
 
@@ -157,33 +156,43 @@ public class GeneratorEntity : IGenerator
         }
     }
 
-    public void SetNumOwned(uint newNumOwned)
+    public void SetNumOwned(HugeInt newNumOwned)
     {
         NumOwned = newNumOwned;
         MarkDirty(GeneratorDirtyFlags.OwnedCount);
         MarkDirty(GeneratorDirtyFlags.AmountGenerated);
+
+        RecalcNextCost();
     }
 
     public void Purchase(int numToPurchase)
     {
-        if(numToPurchase == PurchaseQuantityController.PURCHASE_MAX_POSSIBLE)
+        HugeInt numToPurchase_Huge;
+
+        if (numToPurchase == PurchaseQuantityController.PURCHASE_MAX_POSSIBLE)
         {
-            numToPurchase = GetMaxAffordableUnits(CurrencyManager.Instance.GetCurrency(m_data.CostType));
+            numToPurchase_Huge = GetMaxAffordableUnits(CurrencyManager.Instance.GetCurrency(m_data.CostType));
+        }
+        else
+        {
+            numToPurchase_Huge = numToPurchase;
         }
 
-        double costOfPurchase = GetCostToPurchase(numToPurchase);
+        HugeInt costOfPurchase = GetCostToPurchase(numToPurchase_Huge);
 
         if (CurrencyManager.Instance.TrySpendCurrency(m_data.CostType, costOfPurchase))
         {
             MarkDirty(GeneratorDirtyFlags.OwnedCount);
             MarkDirty(GeneratorDirtyFlags.AmountGenerated);
 
-            NumOwned += (uint)numToPurchase;
+            NumOwned += numToPurchase_Huge;
 
-            GameState.Instance.OnPurchaseGenerator(m_data, numToPurchase);
+            GameState.Instance.OnPurchaseGenerator(m_data, numToPurchase_Huge);
         }
+
+        RecalcNextCost();
     }
-    
+
     public void Run()
     {
         if(IsActive)
@@ -195,73 +204,112 @@ public class GeneratorEntity : IGenerator
             }
             else
             {
-                GenerateCurrency();
+                GenerateCurrency(HugeInt.One);
             }
         }
     }
 
-    private double GetCostForNext(int n)
+	private HugeInt _nextCost; // price of the very next unit
+	private void RecalcNextCost()
+	{
+		// first purchase OR no growth
+		if (NumOwned == HugeInt.Zero || m_data.CostGrowthNumerator <= HugeInt.Zero || m_data.CostGrowthDenominator <= HugeInt.Zero)
+		{
+			_nextCost = (HugeInt)m_data.BaseCost;
+			return;
+		}
+
+		// nextCost = baseCost * (num^owned) / (den^owned)
+		var ownedBI = (System.Numerics.BigInteger)NumOwned; // assuming cast exists
+
+		HugeInt numPow = HugeInt.Pow(m_data.CostGrowthNumerator, ownedBI);
+		HugeInt denPow = HugeInt.Pow(m_data.CostGrowthDenominator, ownedBI);
+
+		_nextCost = ((HugeInt)m_data.BaseCost * numPow) / denPow;
+	}
+
+	private HugeInt GetCostForNext(HugeInt n)
+	{
+		if (m_data.CostGrowthNumerator <= HugeInt.Zero || m_data.CostGrowthDenominator <= HugeInt.Zero)
+		{
+			return m_data.BaseCost_HugeInt;
+		}
+
+		if (n <= HugeInt.Zero) 
+        {
+            return HugeInt.Zero; 
+        }
+
+		HugeInt total = HugeInt.Zero;
+		HugeInt price = _nextCost; // cost of the very next unit
+
+		HugeInt i = HugeInt.Zero;
+		while (i < n)
+		{
+			total += price;
+			price = HugeIntMath.MulDivFloor(price, m_data.CostGrowthNumerator, m_data.CostGrowthDenominator);
+			i += HugeInt.One;
+		}
+
+		return total;
+	}
+	private HugeInt GetMaxAffordableUnits(HugeInt funds)
+	{
+		if (funds <= HugeInt.Zero || m_data.CostGrowthNumerator <= HugeInt.Zero || m_data.CostGrowthDenominator <= HugeInt.Zero)
+        {
+			return HugeInt.Zero;
+		}
+
+		// Linear shortcut if growth = 1
+		if (m_data.CostGrowthNumerator == m_data.CostGrowthDenominator)
+		{
+			HugeInt unitPrice = _nextCost; // all future prices equal in linear case
+			return funds / unitPrice;
+		}
+
+		// Can't afford one?
+		if (GetCostForNext(HugeInt.One) > funds)
+			return HugeInt.Zero;
+
+		// Exponential search
+		HugeInt low = HugeInt.One;
+		HugeInt high = new HugeInt(2);
+		while (GetCostForNext(high) <= funds)
+		{
+			low = high;
+			high = high * (HugeInt)2;
+		}
+
+		// Binary search between low (affordable) and high (not)
+		while (low + HugeInt.One < high)
+		{
+			HugeInt mid = (low + high) / 2;
+
+			if (GetCostForNext(mid) <= funds)
+            {
+				low = mid;
+			}
+
+			else high = mid;
+		}
+
+		return low;
+	}
+
+	public HugeInt GetCostToPurchase(HugeInt numToPurchase)
     {
-        if (n <= 0)
-        {
-            return 0;
-        }
 
-        double b = m_data.BaseCost;
-        double r = m_data.CostGrowth;
-        double currOwned = NumOwned;
-
-        if (Mathf.Approximately((float)r, 1f))
-        {
-            // Linear fallback: cost = baseCost * n
-            return b * n;
-        }
-
-        double factor = Math.Pow(r, currOwned);
-        // geometric sum formula
-        return b * factor * (Math.Pow(r, n) - 1) / (r - 1);
-    }
-
-    private int GetMaxAffordableUnits(double funds)
-    {
-        double b = m_data.BaseCost;
-        double r = m_data.CostGrowth;
-        double currOwned = NumOwned;
-
-        if (funds < GetCostForNext(1))
-        {
-            return 0;
-        }
-
-        if (Mathf.Approximately((float)r, 1f))
-        {
-            // Linear case: cost per unit = b * 1^L = b
-            return (int)(funds / b);
-        }
-
-        double factor = Math.Pow(r, currOwned);
-        double numerator = funds * (r - 1);
-        double denom = b * factor;
-        double inside = 1 + numerator / denom;
-
-        // protect against rounding error
-        int n = (int)Math.Floor(Math.Log(inside) / Math.Log(r));
-        return Math.Max(0, n);
-    }
-
-    public double GetCostToPurchase(int numToPurchase)
-    {
-        if(numToPurchase == PurchaseQuantityController.PURCHASE_MAX_POSSIBLE)
+        if (numToPurchase == PurchaseQuantityController.PURCHASE_MAX_POSSIBLE)
         {
             numToPurchase = GetMaxAffordableUnits(CurrencyManager.Instance.GetCurrency(m_data.CostType));
-
-            if(numToPurchase == 0)
-            {
-                numToPurchase = 1;
-            }
         }
 
-        return Math.Round(GetCostForNext(numToPurchase));
+        if (numToPurchase == 0)
+        {
+            numToPurchase = 1;
+        }
+
+        return GetCostForNext(numToPurchase);
     }
 
     public void Sell(int numToSell)
@@ -289,12 +337,12 @@ public class GeneratorEntity : IGenerator
        
         if (CurrentGenerationProgress >= 1f)
         {
-            GenerateCurrency();
+            GenerateCurrency(HugeInt.One);
             CurrentGenerationProgress = 0;
         }
     }
 
-    private void GenerateCurrency()
+    private void GenerateCurrency(HugeInt NumGenerations)
     {
         if (!_automated)
         {
@@ -304,23 +352,25 @@ public class GeneratorEntity : IGenerator
         // Marking dirty here mostly to notify view
         MarkDirty(GeneratorDirtyFlags.CurrencyGenerated);
 
-        CurrencyManager.Instance.ModifyCurrency(m_data.GeneratedCurrencyType, CurrentAmount);
+		CurrencyManager.Instance.ModifyCurrency(m_data.GeneratedCurrencyType, CurrentAmount * NumGenerations);
 
-        ClearDirtyFlag(GeneratorDirtyFlags.CurrencyGenerated);
+		ClearDirtyFlag(GeneratorDirtyFlags.CurrencyGenerated);
     }
 
     private void CalculateAmountGenerated()
     {
         // Recalculate amount to generate
         // Base yield = BaseGeneratedCurrency × Owned
-        double amount = Data.BaseGeneratedCurrency * NumOwned;
+       
+        HugeInt baseGeneratedBD = (HugeInt)m_data.BaseGeneratedCurrency;
+        HugeInt amount = baseGeneratedBD * NumOwned;
 
         // Apply all amount multipliers
         foreach (var up in _appliedUpgrades)
         {
             if (up.Type == UpgradeType.AmountUpgrade)
             {
-                amount *= up.UpgradeValue;
+                amount *= (HugeInt)up.UpgradeValue;
             }
         }
 
@@ -350,11 +400,11 @@ public class GeneratorEntity : IGenerator
 
     public bool CanShow()
     {
-        return IsActive || CurrencyManager.Instance.GetCurrency(m_data.CostType) >= m_data.CurrencyRequiredToShowView;
+        return IsActive || CurrencyManager.Instance.GetCurrency(m_data.CostType) >= (HugeInt)m_data.CurrencyRequiredToShowView;
     }
 
     public bool ShouldObscure()
     {
-        return !IsActive && CurrencyManager.Instance.GetCurrency(m_data.CostType) < m_data.CurrencyRequiredToUnobscureView;
+        return !IsActive && CurrencyManager.Instance.GetCurrency(m_data.CostType) < (HugeInt)m_data.CurrencyRequiredToUnobscureView;
     }
 }

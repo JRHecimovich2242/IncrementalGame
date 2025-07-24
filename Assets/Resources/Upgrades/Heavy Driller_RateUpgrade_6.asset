@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Heavy Driller_RateUpgrade_6
   m_EditorClassIdentifier: 
   UpgradeName: Charging Prisms 7
-  UpgradeDescription: Charging prisms overclock drills, heavy drillers are twice
-    as efficient
+  UpgradeDescription: Charging prisms overclock drills, heavy drillers are 25% faster
   CostType: 0
-  Cost: 36450
+  Cost:
+    _serialized: 5692
   TargetGenerator: {fileID: 11400000, guid: 8f1034bfcfa57f443be45df53c678623, type: 2}
   Type: 0
   DisplayCondition:

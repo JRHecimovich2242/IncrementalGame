@@ -15,7 +15,8 @@ MonoBehaviour:
   UpgradeName: Improved Drills 10
   UpgradeDescription: Improved drills double drillminer output
   CostType: 0
-  Cost: 984150
+  Cost:
+    _serialized: 1912
   TargetGenerator: {fileID: 11400000, guid: 7c9911d77f83b02459ac1de9bd2fe3e9, type: 2}
   Type: 1
   DisplayCondition:

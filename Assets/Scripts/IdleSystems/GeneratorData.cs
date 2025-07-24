@@ -4,10 +4,15 @@ using UnityEngine;
 public class GeneratorData : ScriptableObject
 {
     public string GeneratorId;
+    [TextArea]
+    public string GeneratorDescription;
     public CurrencyType CostType;
     public double CurrencyRequiredToShowView;
     public double CurrencyRequiredToUnobscureView;
     public double BaseCost;
+    public HugeInt BaseCost_HugeInt;
+    public int CostGrowthNumerator;
+    public int CostGrowthDenominator;
     public double CostGrowth;
     public CurrencyType GeneratedCurrencyType;
     public double BaseGeneratedCurrency;

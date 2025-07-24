@@ -13,10 +13,16 @@ MonoBehaviour:
   m_Name: 5_Scientific_Studies
   m_EditorClassIdentifier: 
   GeneratorId: Scientific Studies
+  GeneratorDescription: We need scientists and chemists to study the properties of
+    these strange new crystals
   CostType: 0
   CurrencyRequiredToShowView: 10000
   CurrencyRequiredToUnobscureView: 20000
   BaseCost: 1000000
+  BaseCost_HugeInt:
+    _serialized: 1000000
+  CostGrowthNumerator: 115
+  CostGrowthDenominator: 100
   CostGrowth: 1.15
   GeneratedCurrencyType: 0
   BaseGeneratedCurrency: 5000000
