@@ -1,6 +1,20 @@
 # IncrementalGame
 A simple idle/incremental game made in Unity
 
+# Media
+[Gameplay Video](https://youtu.be/euznfvszGGw)
+
+Screenshots:
+![Tutorial Image 1](https://github.com/JRHecimovich2242/IncrementalGame/blob/main/Screenshots/Screenshot%20(4).png?raw=true)
+
+![Tutorial Image 2](https://github.com/JRHecimovich2242/IncrementalGame/blob/main/Screenshots/Screenshot%20(3).png?raw=true)
+
+![Generator Upgrades](https://github.com/JRHecimovich2242/IncrementalGame/blob/main/Screenshots/Screenshot%20(5).png?raw=true)
+
+![Late Game Screenshot](https://github.com/JRHecimovich2242/IncrementalGame/blob/main/Screenshots/Screenshot%20(1).png?raw=true)
+
+![Another Late Game Screenshot](https://github.com/JRHecimovich2242/IncrementalGame/blob/main/Screenshots/Screenshot%20(2).png?raw=true)
+
 # Credits
 Art by Rafa Morales
 
