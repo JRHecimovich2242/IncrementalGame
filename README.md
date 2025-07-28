@@ -1,5 +1,5 @@
-# IncrementalGame
-A simple idle/incremental game made in Unity
+# IncrementalGame (aka IdleGunner)
+A simple idle/incremental game made in Unity based on and using art from [Minigunner](https://store.steampowered.com/app/1778200/Minigunner/)
 
 # Media
 [Gameplay Video](https://youtu.be/euznfvszGGw)
